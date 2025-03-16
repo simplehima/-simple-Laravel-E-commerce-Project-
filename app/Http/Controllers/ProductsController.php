@@ -3,16 +3,22 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-public function index(Request $request)
+class ProductsController extends Controller
 {
-    $query = Product::query();
+    public function index(Request $request)
+    {
+        $products = Product::with('brand') // Eager loading
+                    ->when($request->search, function ($query, $search) {
+                        return $query->where('name', 'like', "%{$search}%");
+                    })
+                    ->paginate(6);
 
-    if ($request->has('search')) {
-        $query->where('name', 'like', '%' . $request->search . '%');
+        return view('products.index', compact('products'));
     }
 
-    $products = $query->get();
-
-    return view('products.index', compact('products'));
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
 }
- 
+
