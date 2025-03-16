@@ -12,7 +12,6 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 8, 2);
             $table->text('description');
             $table->string('image_path');
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

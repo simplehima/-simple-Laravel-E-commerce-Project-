@@ -2,20 +2,20 @@
 
 @section('content')
     <div class="container">
-        <div class="card">
-            <img src="{{ $product->image_path }}" class="card-img-top">
-            <div class="card-body">
-                <h1>{{ $product->name }}</h1>
-                <p>{{ $product->description }}</p>
-                <p class="fw-bold">Brand: {{ $product->brand->name }}</p>
-                <p class="fw-bold">Price: ${{ $product->price }}</p>
-                <form method="POST" action="{{ route('orders.store') }}">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <button type="submit" class="btn btn-success">Order Now</button>
-                </form>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary mt-3">Back to Products</a>
-            </div>
-        </div>
+        <h1>{{ $product->name }}</h1>
+
+        <img src="{{ $product->image_path }}" class="img-fluid mb-3" style="max-width: 300px;">
+
+        <p><strong>Price:</strong> ${{ number_format($product->price, 2) }}</p>
+        <p><strong>Description:</strong> {{ $product->description }}</p>
+
+        <a href="{{ route('products.index') }}" class="btn btn-secondary">Back to Products</a>
+        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+
+        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
     </div>
 @endsection
